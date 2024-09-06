@@ -229,17 +229,6 @@
     </div>
     <!--/ Abstract. -->
 
-    <!-- Paper video. -->
-    <!-- <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div> -->
-    <!--/ Paper video. -->
   </div>
 </section>
 
@@ -249,42 +238,9 @@
     <!-- Animation. -->
     <div class="columns is-centered">
       <div class="column is-full-width">
-        <!-- Interpolating. -->
-        <!-- <h3 class="title is-4">Interpolating states</h3>
-        <div class="content has-text-justified">
-          <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
-          </p>
-        </div>
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_start.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
-            </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="100" value="0" type="range">
-          </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_end.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
-        </div>
-        <br/> -->
-        <!--/ Interpolating. -->
 
-        <!-- Re-rendering. -->
-        <h3 class="title is-4">Hardware setup</h3>
+        <!-- Hardware. -->
+        <h2 class="title is-4">Hardware setup</h2>
         <div class="content has-text-justified">
           <p>
             We designed a data collection platform comprising a pair of stereo thermal cameras, 
@@ -296,17 +252,7 @@
             connected to the sensors. To ensure clarity in interpreting the orientation and relative 
             positioning of the sensors, we provide a diagram detailing the coordinate systems for each 
             sensor, which is crucial for subsequent sensor fusion and data processing.
-        </div>
-        <div class="content has-text-justified">
-          <!-- <video id="replay-video"
-                 controls
-                 muted
-                 preload
-                 playsinline
-                 width="75%">
-            <source src="./static/videos/replay.mp4"
-                    type="video/mp4">
-          </video> -->
+          </p>
           <img src="./static/images/hardware_setup_coord.png"
               class="hardware_system"
               alt="Hardware setup and coordinate system for data collection"/>
@@ -318,8 +264,10 @@
                  alt="Hardware setup for data collection"
                  style="width: 80%"/>
         </div>
+        <!--/ Hardware. -->
+
         <!--/ Collection. -->
-        <h3 class="title is-4">Data Collection</h3>
+        <h2 class="title is-4">Data Collection</h2>
         <div class="content has-text-justified">
           <ul>
             <li>Camera-IMU calibration: Kalibr with heated checkerboard target.</li>
@@ -346,7 +294,7 @@
         </div>
         <!--/ Collection. -->
 
-        <h3 class="title is-4">Data Description</h3>
+        <h2 class="title is-4">Data Description</h2>
         <div class="content has-text-justified">
           <p>
             <strong>Quantative:</strong> The processed
@@ -393,10 +341,47 @@
           <img src="./static/images/data_variety.png"
               class="data"
               alt="Data variety spanning urban settings, sparse trees, dense trees"/>
-          <p>(YL: todo prescribed fire thermal)</p>
+          <p>Our dataset also include stereo thermal collected in UAS flying in the forest during real prescribed fire and can be used to test various vision tasks
+            such as object detection.
+          </p>
+          <img src="./static/images/prescribed_data.png"
+              class="data"
+              alt="Data collected in UAV flight in prescribed fire"/>
+          <p>In particular, fire embers are visible in the prescribed fire collection, which is useful to develop algorithms for diaster response and wildfire monitoring.</p>
         </div>
+      </div>
+    </div>
 
-        <h3 class="title is-4">Evaluation</h3>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="ember" autoplay muted loop playsinline controls height="100%">
+            <source src="./static/videos/ember.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="ember" autoplay muted loop playsinline controls height="100%">
+            <source src="./static/videos/ember2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="ember" autoplay muted loop playsinline controls height="100%">
+            <source src="./static/videos/ember3.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-4">Evaluation</h2>
         <div class="content has-text-justified">
           <p>We implemented 5 representative stereo depth estimation
             models to evaluate the capabilities of our new dataset in
@@ -423,10 +408,10 @@
           <img src="./static/images/smoke_infer.png"
               class="depth_result"
               alt="Depth estimation results in smoke-filled environment"/>
-          </div>
-
+        </div>
       </div>
     </div>
+
     <!--/ Animation. -->
 
 
