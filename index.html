@@ -111,7 +111,7 @@
               <a href="https://www.linkedin.com/in/tylerkharp/">Tyler Harp</a>,
             </span>
             <span class="author-block">
-              <a href="https://www.linkedin.com/in/yaoyu-hu-68946985/">Yaoyu Hu</a>,
+              <a href="https://scholar.google.com/citations?user=qIs5g7MAAAAJ&hl=en">Yaoyu Hu</a>,
             </span>
             <span class="author-block">
               <a href="https://www.cs.cmu.edu/~./jeanoh/">Jean Oh</a>,
@@ -161,12 +161,22 @@
               </span> -->
               <!-- Dataset Link. -->
               <span class="link-block">
-                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                <a href="https://github.com/firestereo/firestereo"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="far fa-images"></i>
                   </span>
                   <span>Data</span>
+                  </a>
+              </span>
+              <!-- Sample Dataset Link. -->
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Sample Data</span>
                   </a>
               </span>
               <!-- Code Link. -->
@@ -176,7 +186,7 @@
                   <span class="icon">
                       <i class="fab fa-github"></i>
                   </span>
-                  <span>Code (coming soon)</span>
+                  <span>Code</span>
                   </a>
               </span>
             </div>
@@ -195,11 +205,13 @@
         <source src="./static/videos/teaser_final.mp4"
                 type="video/mp4">
       </video>
-      <!-- <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
+      <h2 class="subtitle has-text-centered">
+        <!-- <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
         free-viewpoint
-        portraits.
-      </h2> -->
+        portraits. -->
+        FIReStereo provides synchronized stereo thermal images, ground truth depth maps, LiDAR scans, and odometry data
+        in challenging outdoor environments.
+      </h2>
     </div>
   </div>
 </section>
@@ -243,111 +255,83 @@
         <h2 class="title is-4">Hardware setup</h2>
         <div class="content has-text-justified">
           <p>
-            We designed a data collection platform comprising a pair of stereo thermal cameras, 
-            a LiDAR, and an inertial measurement unit (IMU), as illustrated in the diagram below. 
-            These sensors are mounted on an unmanned aerial vehicle (UAV) platform, which supports 
+            A pair of stereo thermal cameras, a LiDAR, and an inertial measurement unit (IMU) are 
+            mounted on an unmanned aerial vehicle (UAV) platform, which supports 
             data collection during handheld experiments and UAV flights. The stereo thermal pair is 
-            oriented in a forward-facing direction with a 24.6 cm baseline, and the LiDAR is positioned 
+            facing forward with a 24.6 cm baseline, and the LiDAR is positioned 
             on top of the UAV. An onboard NVIDIA® Jetson AGX Orin™ computer is
-            connected to the sensors. To ensure clarity in interpreting the orientation and relative 
-            positioning of the sensors, we provide a diagram detailing the coordinate systems for each 
-            sensor, which is crucial for subsequent sensor fusion and data processing.
+            connected to the sensors. Setup and coordinate system for each sensor:
           </p>
           <img src="./static/images/hardware_setup_coord.png"
               class="hardware_system"
               alt="Hardware setup and coordinate system for data collection"/>
-          <p>Sensor specifications are presented below. For the FLIR Boson thermal cameras, 
-            we capture the raw-16-bit data, as it retains detailed temperature information 
-            that is lost in 8-bit RGB formats.</p>
+          <p>Sensor specifications: </p>
           <img src="./static/images/sensors_spec.png"
                  class="sensor_specs"
                  alt="Hardware setup for data collection"
-                 style="width: 80%"/>
+                 style="width: 85%"/>
         </div>
         <!--/ Hardware. -->
 
         <!--/ Collection. -->
         <h2 class="title is-4">Data Collection</h2>
         <div class="content has-text-justified">
+          <p>Depth Map Generation:</p>
           <ul>
-            <li>Camera-IMU calibration: Kalibr with heated checkerboard target.</li>
-            <li>LiDAR SLAM: Faster-LIO.</li>
-            <li>Pipeline: LiDAR scans -> Scene reconstruction -> Projection to image frame 
-              -> Occlusion handling & Filtering.</li>
+            <li>Obtain calibration for Stereo thermal - IMU and LiDAR - IMU.</li>
+            <li>Use LiDAR and IMU data for SLAM to estimate UAV trajectory and generate 3D scene reconstruction.</li>
+            <li>Interpolate odometry pose to thermal timestamps and obtain camera pose.</li>
+            <li>Project point cloud to camera frame using calibration extrinsics.</li>
+            <li>Handle occlusion with 2D grid blocking and filter points with left-right consistency.</li>
           </ul>
-          <p></p>
-            The data includes recordings from 3
-            distinct locations and 13 unique trajectories under various
-            environmental conditions, including day, night, rain, cloud
-            cover, and smoke. Smoke was emitted from training-grade
-            smoke pots. All collected sensor data is time-synchronized
-            with the CPU clock, making it also suitable to use for mapping 
-            and localization. A closed-loop trajectory was followed
-            with the same initial and final position, making the dataset
-            suitable for testing loop closure and accumulated drift for
-            mapping and localization. Example of such trajectories with reconstructed
-            scenes are shown below.
-          </p>
+          <p>The resulting depth map is in the <strong>left</strong> camera frame, and stereo disparity
+            can be obtained with provided calibration, supporting both monocular and stereo depth estimation.
+            A closed-loop trajectory was followed with the same initial and final position, making the dataset
+            suitable for testing loop closure and accumulated drift for mapping and localization.</p>
           <img src="./static/images/slam_maps.png"
-                 class="slam"
-                 alt="Maps generated by Faster-LIO"/>
+            class="slam"
+            alt="Maps generated by Faster-LIO"/>
+            The data includes recordings from 4 distinct locations and 16 unique trajectories under various
+            environmental conditions, including day, night, rain, cloud cover, smoke. Smoke was emitted from training-grade smoke pots,
+            with one location featuring smoke from an actual prescribed fire.
+          </p>
+          <img src="./static/images/env_photos.png"
+            class="data_env"
+            alt="Photos of various environments."/>
+
         </div>
         <!--/ Collection. -->
 
         <h2 class="title is-4">Data Description</h2>
         <div class="content has-text-justified">
           <p>
-            <strong>Quantative:</strong> The processed
-            FIReStereo dataset contains 150,579 stereo thermal
-            images total across all environments. 39% are in urban
-            environment, 21% are in mixed environment, 40% are
+            <img src="./static/images/depth_histogram.png" alt="Sample Image" style="float: right; margin-left: 10px; width: 250px;">
+            The processed FIReStereo dataset contains 204,594 stereo thermal
+            images total across all environments. 29% are in urban
+            environment, 15% are in mixed environment, 56% are
             in wilderness environment with dense trees. 84% of the
             images were collected in day-time and the rest were during
-            night-time. Obstacles were measured at a median depth of
-            7.40 m which is a typical range for UAS obstacle avoidance. 
-            48% stereo thermal pairs are smokeless, while 52% contain smoke. Of the smokeless
-            images, we label 35,706 with depth-map pairs annotated
-            from LiDAR and Faster-LIO.
+            night-time. Obstacles were measured at a median depth of 7.40 m, with quartiles q1 =
+            5.17 m and q3 = 10.52 m, which falls within the typical
+            range for UAS obstacle avoidance. Histogram on the right shows the distribution of distances to objects.
+            42% stereo thermal pairs are smokeless, while 58% contain smoke. Of the smokeless
+            images, 35,706 have corresponding depth-map pairs.
           </p>
-          <p>
-            <strong>Qualitative:</strong> The Hawkins
-            experimental sequences feature scenes of dense forests and
-            urban structures. The data were collected during the day with
-            cloudy and windy conditions. (YL: should we include below details?)
-            <ul>
-              <li>Sequence 1-2: Features dense trees and branches with varying thickness.</li>
-              <li>Sequence 3: Captures views of a thin pole, trees, and buildings representing
-                typical urban obstacles that a UAS might face in response to a wildfire disaster.</li>
-              <li>Sequence 4: Contains views of a car, pole, and distant trees.</li>
-              <li>Sequence 5: replicated a disaster scenario of an upside-down car engulfed in dense smoke.</li>
-              </ul> 
-          </p>
-          <p>
-            The Frick experimental sequences were recorded during
-            the night and under rainy conditions. The captured temperature range for these sequences is much lower and is
-            evident from the darker thermal images. These sequences
-            feature bare trees in varying sparsity, vehicles, poles, roads
-            and buildings.
-          </p>
-          <p>
-            Gascola sequences were recorded in heavily degraded wilderness, featuring dense smoke, night-time,
-            dense trees and bushes. These conditions were chosen to
-            simulate the wildfire disaster response scenario in which the
-            UAS must navigate through a cluttered forest environment
-            with extreme visual degradation. We show that depth estimation models trained on smokeless data is able to generalize
-            to these smoke-filled data.
-          </p>
-          <p>The figure below shows the variety of environments spanning urban settings, sparse trees, and dense trees.</p>
+          <p>Our data various in environment conditions and varying amounts of clutter spanning sub-urban settings, sparse trees, and dense trees. 
+            Depth data is available for the first two locations, while the latter two are intended for testing purposes. A detailed description of each sequence in the 4 locations can be found in the dataset text file.</p>
+          <ul>
+            <li>Hawkins: Collected on a cloudy and windy day, featuring scenes of dense forest and urban structures.</li>
+            <li>Frick: Collected on a rainy night, featuring bare trees in varying sparity and urban objects.</li>
+            <li>Gascola: Collected in heavily degraded wilderness during day and night, featuring dense smoke and vegetation to simulate wildfire disaster response scenario.</li>
+            <li>Firesgl: Collected during an actual prescribed fire, featuring dense forest, smoke, and fire.</li>
+          </ul>
           <img src="./static/images/data_variety.png"
               class="data"
               alt="Data variety spanning urban settings, sparse trees, dense trees"/>
-          <p>Our dataset also include stereo thermal collected in UAS flying in the forest during real prescribed fire and can be used to test various vision tasks
-            such as object detection.
-          </p>
+          <p>Noticebly, flames, fire embers, and objects relevant to diaster response are visible in the Firesgl collection, making it useful for developing algorithms like ember detection for wildfire monitoring.</p>
           <img src="./static/images/prescribed_data.png"
-              class="data"
-              alt="Data collected in UAV flight in prescribed fire"/>
-          <p>In particular, fire embers are visible in the prescribed fire collection, which is useful to develop algorithms for diaster response and wildfire monitoring.</p>
+          class="data"
+          alt="Data collected in UAV flight in prescribed fire"/>
         </div>
       </div>
     </div>
@@ -386,7 +370,7 @@
           <p>We implemented 5 representative stereo depth estimation
             models to evaluate the capabilities of our new dataset in
             facilitating robust depth estimation for UAS navigation in
-            cluttered environment. More details and quantative results 
+            cluttered environment. More details and quantitative results 
             can be found in the paper.
           </p>
           <ul>
@@ -398,7 +382,8 @@
             system while maintaining similar performance to the more
             resource-intensive models. We observe the model trained on our dataset
             is now able to estimate depth for outdoor thermal images with 
-            challenging objects such as thin tree branches and poles. (YL: wording?)
+            challenging objects, such as thin tree branches and poles, where were
+            previously difficult to capture.
           </p>
           <img src="./static/images/inference.png"
               class="depth_result"
@@ -449,7 +434,7 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@misc{fisData,
+    <pre><code>@article{firestereo,
   author    = {Dhrafani, Devansh and Liu, Yifei and Jong, Andrew and Shin, Ukcheol and He, Yao and Harp, Tyler and Hu, Yaoyu and Oh, Jean and Scherer, Sebastian},
   title     = {Nerfies: Deformable Neural Radiance Fields},
   eprint    = {x},
